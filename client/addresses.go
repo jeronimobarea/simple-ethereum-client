@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/apex/log"
 	"github.com/ethereum/go-ethereum/common"
 	validator "github.com/jeronimobarea/simple-ethereum/address"
 )
@@ -24,18 +23,9 @@ func (svc *ethereumService) CheckBalance(
 	address,
 	token common.Address,
 ) (resp *BalanceResponse, err error) {
-	if valid := validator.ValidateAddress(address); !valid {
-		err = fmt.Errorf("invalid addresss: %s", address)
-		log.
-			WithField("address", address).
-			WithError(err)
-		return
-	}
-	if valid := validator.ValidateAddress(token); !valid {
-		err = fmt.Errorf("invalid token addresss: %s", address)
-		log.
-			WithField("token_address", token).
-			WithError(err)
+	addresses := []interface{}{address, token}
+	if _, invalid, _ := validator.ValidateAddresses(addresses); invalid != nil {
+		err = fmt.Errorf("invalid address/es: %s", invalid)
 		return
 	}
 	return svc.API.CheckBalance(address, token)

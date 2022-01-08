@@ -3,10 +3,10 @@ module github.com/jeronimobarea/simple-ethereum-client
 go 1.17
 
 require (
-	github.com/apex/log v1.9.0
 	github.com/ethereum/go-ethereum v1.10.15
-	github.com/jeronimobarea/simple-ethereum v0.0.0-20220108002301-3efeeba7c549
+	github.com/jeronimobarea/simple-ethereum v0.0.0-20220108010654-9419f171e5d9
 	github.com/stretchr/testify v1.7.0
+	github.com/tj/assert v0.0.3
 )
 
 require (
@@ -18,7 +18,6 @@ require (
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/google/uuid v1.1.5 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rjeczalik/notify v0.9.1 // indirect
 	github.com/shirou/gopsutil v3.21.4-0.20210419000835-c7a38de76ee5+incompatible // indirect

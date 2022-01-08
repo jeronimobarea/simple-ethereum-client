@@ -6,7 +6,6 @@ import (
 	"github.com/ethereum/go-ethereum"
 	"math/big"
 
-	"github.com/apex/log"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -22,9 +21,7 @@ type apiImplementation struct {
 func NewApiImplementation(provider string) Api {
 	client, err := ethclient.Dial(provider)
 	if err != nil {
-		log.
-			WithError(err).
-			Fatal("error setting up ethereum service")
+		panic("error setting up ethereum service")
 	}
 	return &apiImplementation{client: client}
 }
@@ -37,39 +34,29 @@ func (api *apiImplementation) SendTransaction(
 ) (resp *TransactionResponse, err error) {
 	from, err := simpleAddress.GetAddressFromPrivateKey(fromPk)
 	if err != nil {
-		log.
-			WithError(err).
-			Error("error retrieving the address")
 		return
 	}
 
 	gasPrice, err := api.client.SuggestGasPrice(context.Background())
 	if err != nil {
-		log.
-			WithError(err).
-			Error("error retrieving the gas price")
 		return
 	}
 
-	data := transaction.BuildTransactionData(to, quantity)
+	data, err := transaction.BuildTransactionData(to, quantity)
+	if err != nil {
+		return
+	}
 
 	gasLimit, err := api.client.EstimateGas(context.Background(), ethereum.CallMsg{
 		To:   &token,
 		Data: data,
 	})
 	if err != nil {
-		log.
-			WithError(err).
-			Error("error retrieving the gas limit")
 		return
 	}
 
 	nonce, err := api.client.PendingNonceAt(context.Background(), from)
 	if err != nil {
-		log.
-			WithField("from", from).
-			WithError(err).
-			Error("error retrieving the nonce")
 		return
 	}
 
@@ -83,25 +70,16 @@ func (api *apiImplementation) SendTransaction(
 
 	chainID, err := api.client.NetworkID(context.Background())
 	if err != nil {
-		log.
-			WithError(err).
-			Error("error retrieving the chain Id")
 		return
 	}
 
 	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainID), fromPk)
 	if err != nil {
-		log.
-			WithError(err).
-			Error("error signing transaction")
 		return
 	}
 
 	err = api.client.SendTransaction(context.Background(), signedTx)
 	if err != nil {
-		log.
-			WithError(err).
-			Error("error sending transaction")
 		return
 	}
 
@@ -115,21 +93,10 @@ func (api *apiImplementation) CheckBalance(
 ) (resp *BalanceResponse, err error) {
 	instance, err := NewToken(token, api.client)
 	if err != nil {
-		log.
-			WithField("token_address", token).
-			WithError(err).
-			Error("error getting the token instance")
 		return
 	}
 
 	balance, err := instance.BalanceOf(&bind.CallOpts{}, address)
-	if err != nil {
-		log.
-			WithField("address", address).
-			WithField("token_address", token).
-			WithError(err).
-			Error("error retrieving the address balance")
-	}
 
 	resp = &BalanceResponse{
 		Balance: balance,

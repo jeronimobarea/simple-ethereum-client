@@ -5,7 +5,7 @@ import (
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
-	validator "github.com/jeronimobarea/simple-ethereum/address"
+	simpleCommon "github.com/jeronimobarea/simple-ethereum/common"
 )
 
 type (
@@ -24,7 +24,7 @@ func (svc *ethereumService) CheckBalance(
 	token common.Address,
 ) (resp *BalanceResponse, err error) {
 	addresses := []interface{}{address, token}
-	if _, invalid, _ := validator.ValidateAddresses(addresses); invalid != nil {
+	if _, invalid, _ := simpleCommon.ValidateAddresses(addresses); invalid != nil {
 		err = fmt.Errorf("invalid address/es: %s", invalid)
 		return
 	}

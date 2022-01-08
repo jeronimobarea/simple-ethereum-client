@@ -9,7 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 
-	simpleAddress "github.com/jeronimobarea/simple-ethereum/address"
+	simpleCommon "github.com/jeronimobarea/simple-ethereum/common"
 )
 
 type TransactionResponse struct {
@@ -24,12 +24,12 @@ func (svc *ethereumService) SendTransaction(
 ) (resp *TransactionResponse, err error) {
 	addresses := []interface{}{to, token}
 
-	if _, invalid, _ := simpleAddress.ValidateAddresses(addresses); invalid != nil {
+	if _, invalid, _ := simpleCommon.ValidateAddresses(addresses); invalid != nil {
 		err = fmt.Errorf("invalid address/es: %s", invalid)
 		return
 	}
 
-	if valid := simpleAddress.SafeBalanceIsValid(quantity); !valid {
+	if valid := simpleCommon.SafeBalanceIsValid(quantity); !valid {
 		err = fmt.Errorf("quantity is not valid %d", quantity)
 		return
 	}

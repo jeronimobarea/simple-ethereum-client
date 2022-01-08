@@ -218,6 +218,8 @@ github.com/jackpal/go-nat-pmp v1.0.2-0.20160603034137-1fa385a6f458/go.mod h1:QPH
 github.com/jedisct1/go-minisign v0.0.0-20190909160543-45766022959e/go.mod h1:G1CVv03EnqU1wYL2dFwXxW2An0az9JTl/ZsqXQeBlkU=
 github.com/jeronimobarea/simple-ethereum v0.0.0-20220108010654-9419f171e5d9 h1:fas3pAhpvXOozb1U4jmdF6KAeJ2A5kl3PegFLUlWkaI=
 github.com/jeronimobarea/simple-ethereum v0.0.0-20220108010654-9419f171e5d9/go.mod h1:F+eXoB3846KRFTJ/pq/cY5Kpvbfs2qeU+k3GsoICZlU=
+github.com/jeronimobarea/simple-ethereum v0.0.0-20220108192521-c365244a81e0 h1:59ZP0nv+andoEMhGW/0eD2gKRnfrIrT8aUAuXr2nIG8=
+github.com/jeronimobarea/simple-ethereum v0.0.0-20220108192521-c365244a81e0/go.mod h1:F+eXoB3846KRFTJ/pq/cY5Kpvbfs2qeU+k3GsoICZlU=
 github.com/jessevdk/go-flags v0.0.0-20141203071132-1679536dcc89/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
 github.com/jmespath/go-jmespath v0.4.0/go.mod h1:T8mJZnbsbmF+m6zOOFylbeCJqk5+pHWvzYPziyZiYoo=
 github.com/jmespath/go-jmespath/internal/testify v1.5.1/go.mod h1:L3OGu8Wl2/fWfCI6z80xFu9LTZmf1ZRjMHUOPmWr69U=

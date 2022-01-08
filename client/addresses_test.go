@@ -11,6 +11,9 @@ import (
 	"github.com/tj/assert"
 )
 
+/*
+ * CheckBalance
+ */
 func Test_CheckBalance_ValidInput(t *testing.T) {
 	address := common.HexToAddress("0x323b5d4c32345ced77393b3530b1eed0f346429d")
 	token := common.HexToAddress("0x323b5d4c32345ced77393b3530b1eed0f346429d")

@@ -13,6 +13,9 @@ import (
 	"github.com/tj/assert"
 )
 
+/*
+ * SendTransaction
+ */
 func Test_SendTransaction_ValidInput(t *testing.T) {
 	quantity := big.NewInt(10)
 	fromPk, err := crypto.GenerateKey()

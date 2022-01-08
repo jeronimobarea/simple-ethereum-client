@@ -3,15 +3,16 @@ package client
 import (
 	"context"
 	"crypto/ecdsa"
-	"github.com/ethereum/go-ethereum"
+	"errors"
+	"golang.org/x/crypto/sha3"
 	"math/big"
 
+	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
-	simpleAddress "github.com/jeronimobarea/simple-ethereum/address"
-	"github.com/jeronimobarea/simple-ethereum/transaction"
+	simpleCommon "github.com/jeronimobarea/simple-ethereum/common"
 )
 
 type apiImplementation struct {
@@ -26,13 +27,21 @@ func NewApiImplementation(provider string) Api {
 	return &apiImplementation{client: client}
 }
 
+func SafeNewApiImplementation(provider string) (Api, error) {
+	client, err := ethclient.Dial(provider)
+	if err != nil {
+		return nil, errors.New("error setting up ethereum service")
+	}
+	return &apiImplementation{client: client}, nil
+}
+
 func (api *apiImplementation) SendTransaction(
 	quantity *big.Int,
 	fromPk *ecdsa.PrivateKey,
 	to,
 	token common.Address,
 ) (resp *TransactionResponse, err error) {
-	from, err := simpleAddress.GetAddressFromPrivateKey(fromPk)
+	from, err := simpleCommon.GetAddressFromPrivateKey(fromPk)
 	if err != nil {
 		return
 	}
@@ -42,7 +51,20 @@ func (api *apiImplementation) SendTransaction(
 		return
 	}
 
-	data, err := transaction.BuildTransactionData(to, quantity)
+	transferFnSignature := []byte("transfer(address,uint256)")
+
+	hash := sha3.NewLegacyKeccak256()
+	hash.Write(transferFnSignature)
+	methodID := hash.Sum(nil)[:4]
+
+	paddedAddress := common.LeftPadBytes(to.Bytes(), common.HashLength)
+	paddedAmount := common.LeftPadBytes(quantity.Bytes(), common.HashLength)
+
+	var data []byte
+	data = append(data, methodID...)
+	data = append(data, paddedAddress...)
+	data = append(data, paddedAmount...)
+
 	if err != nil {
 		return
 	}

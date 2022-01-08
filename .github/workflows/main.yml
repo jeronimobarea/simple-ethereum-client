@@ -1,0 +1,25 @@
+name: Normal branch build
+
+on: [ pull_request, push ]
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: GO fmt
+        run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
+        if: matrix.os == 'ubuntu-latest'
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        run: make run_tests

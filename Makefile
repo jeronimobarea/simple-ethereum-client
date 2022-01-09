@@ -1,9 +1,6 @@
 
 run_tests:
-	docker build -t go_test_env -f Dockerfile .
+	docker build . -t go_test_env
 	docker run \
     	--rm \
     	go_test_env
-
-update_libraries:
-	go get -u github.com/jeronimobarea/simple-ethereum-client

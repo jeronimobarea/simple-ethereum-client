@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"errors"
-	"golang.org/x/crypto/sha3"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum"
@@ -12,30 +11,31 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
-	simpleCommon "github.com/jeronimobarea/simple-ethereum/common"
+	"golang.org/x/crypto/sha3"
+
+	simpleCommon "github.com/jeronimobarea/simple-ethereum-client/common"
+	simpleToken "github.com/jeronimobarea/simple-ethereum-client/token"
 )
 
 type apiImplementation struct {
 	client *ethclient.Client
 }
 
-func NewApiImplementation(provider string) Api {
-	client, err := ethclient.Dial(provider)
-	if err != nil {
-		panic("error setting up ethereum service")
+func NewApiImplementation(client *ethclient.Client) Api {
+	if client == nil {
+		panic("ethereum client cannot be nil")
 	}
 	return &apiImplementation{client: client}
 }
 
-func SafeNewApiImplementation(provider string) (Api, error) {
-	client, err := ethclient.Dial(provider)
-	if err != nil {
-		return nil, errors.New("error setting up ethereum service")
+func SafeNewApiImplementation(client *ethclient.Client) (Api, error) {
+	if client == nil {
+		return nil, errors.New("ethereum client cannot be nil")
 	}
 	return &apiImplementation{client: client}, nil
 }
 
-func (api *apiImplementation) SendTransaction(
+func (api *apiImplementation) SimpleSendTransaction(
 	quantity *big.Int,
 	fromPk *ecdsa.PrivateKey,
 	to,
@@ -109,11 +109,11 @@ func (api *apiImplementation) SendTransaction(
 	return
 }
 
-func (api *apiImplementation) CheckBalance(
+func (api *apiImplementation) SimpleCheckBalance(
 	address,
 	token common.Address,
 ) (resp *BalanceResponse, err error) {
-	instance, err := NewToken(token, api.client)
+	instance, err := simpleToken.NewToken(token, api.client)
 	if err != nil {
 		return
 	}
@@ -127,7 +127,7 @@ func (api *apiImplementation) CheckBalance(
 	return
 }
 
-func (api *apiImplementation) CheckBalances(
+func (api *apiImplementation) SimpleCheckBalances(
 	addresses []common.Address,
 	token common.Address,
 ) (resp *BalancesResponse, err error) {
@@ -136,7 +136,7 @@ func (api *apiImplementation) CheckBalances(
 	for _, address := range addresses {
 		var balance *BalanceResponse
 
-		balance, err = api.CheckBalance(address, token)
+		balance, err = api.SimpleCheckBalance(address, token)
 		if err != nil {
 			tmpBalances[address] = &BalanceResponse{
 				Error: err,

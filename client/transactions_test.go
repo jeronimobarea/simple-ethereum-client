@@ -8,18 +8,17 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/jeronimobarea/simple-ethereum/constants"
 	"github.com/stretchr/testify/mock"
 	"github.com/tj/assert"
 )
 
 /*
- * SendTransaction
+ * SimpleSendTransaction
  */
 func Test_SendTransaction_ValidInput(t *testing.T) {
 	quantity := big.NewInt(10)
 	fromPk, err := crypto.GenerateKey()
-	assert.NoError(t, err, constants.ShouldNotFail)
+	assert.NoError(t, err)
 	to := common.HexToAddress("0x323b5d4c32345ced77393b3530b1eed0f346429d")
 	token := common.HexToAddress("0x323b5d4c32345ced77393b3530b1eed0f346429d")
 
@@ -30,7 +29,7 @@ func Test_SendTransaction_ValidInput(t *testing.T) {
 	}
 
 	mockApi.On(
-		"SendTransaction",
+		"SimpleSendTransaction",
 		mock.Anything, // quantity
 		mock.Anything, // fromPk
 		mock.Anything, // to
@@ -39,8 +38,8 @@ func Test_SendTransaction_ValidInput(t *testing.T) {
 
 	service := NewService(&Resources{API: mockApi})
 
-	res, err := service.SendTransaction(quantity, fromPk, to, token)
-	assert.NoError(t, err, constants.ShouldNotFail)
+	res, err := service.SimpleSendTransaction(quantity, fromPk, to, token)
+	assert.NoError(t, err)
 	assert.Equal(t, mockResponse, res)
 }
 
@@ -54,7 +53,7 @@ func Test_SendTransaction_InvalidPrivateKey(t *testing.T) {
 	mockApi := &MockApi{}
 
 	mockApi.On(
-		"SendTransaction",
+		"SimpleSendTransaction",
 		mock.Anything, // quantity
 		mock.Anything, // fromPk
 		mock.Anything, // to
@@ -63,8 +62,8 @@ func Test_SendTransaction_InvalidPrivateKey(t *testing.T) {
 
 	service := NewService(&Resources{API: mockApi})
 
-	res, err := service.SendTransaction(quantity, nil, to, token)
-	assert.Error(t, err, constants.ShouldFail)
+	res, err := service.SimpleSendTransaction(quantity, nil, to, token)
+	assert.Error(t, err)
 	assert.EqualError(t, err, "private key cannot be nil")
 	assert.Equal(t, expectedRes, res)
 }
@@ -72,7 +71,7 @@ func Test_SendTransaction_InvalidPrivateKey(t *testing.T) {
 func Test_SendTransaction_InvalidQuantity(t *testing.T) {
 	quantity := big.NewInt(-10)
 	fromPk, err := crypto.GenerateKey()
-	assert.NoError(t, err, constants.ShouldNotFail)
+	assert.NoError(t, err)
 	to := common.HexToAddress("0x323b5d4c32345ced77393b3530b1eed0f346429d")
 	token := common.HexToAddress("0x323b5d4c32345ced77393b3530b1eed0f346429d")
 
@@ -81,7 +80,7 @@ func Test_SendTransaction_InvalidQuantity(t *testing.T) {
 	mockApi := &MockApi{}
 
 	mockApi.On(
-		"SendTransaction",
+		"SimpleSendTransaction",
 		mock.Anything, // quantity
 		mock.Anything, // fromPk
 		mock.Anything, // to
@@ -90,15 +89,15 @@ func Test_SendTransaction_InvalidQuantity(t *testing.T) {
 
 	service := NewService(&Resources{API: mockApi})
 
-	res, err := service.SendTransaction(quantity, fromPk, to, token)
-	assert.Error(t, err, constants.ShouldFail)
+	res, err := service.SimpleSendTransaction(quantity, fromPk, to, token)
+	assert.Error(t, err)
 	assert.EqualError(t, err, fmt.Sprintf("quantity is not valid %d", quantity))
 	assert.Equal(t, expectedRes, res)
 }
 
 func Test_SendTransaction_NilQuantity(t *testing.T) {
 	fromPk, err := crypto.GenerateKey()
-	assert.NoError(t, err, constants.ShouldNotFail)
+	assert.NoError(t, err)
 	to := common.HexToAddress("0x323b5d4c32345ced77393b3530b1eed0f346429d")
 	token := common.HexToAddress("0x323b5d4c32345ced77393b3530b1eed0f346429d")
 	var quantity *big.Int
@@ -108,7 +107,7 @@ func Test_SendTransaction_NilQuantity(t *testing.T) {
 	mockApi := &MockApi{}
 
 	mockApi.On(
-		"SendTransaction",
+		"SimpleSendTransaction",
 		mock.Anything, // quantity
 		mock.Anything, // fromPk
 		mock.Anything, // to
@@ -117,8 +116,8 @@ func Test_SendTransaction_NilQuantity(t *testing.T) {
 
 	service := NewService(&Resources{API: mockApi})
 
-	res, err := service.SendTransaction(quantity, fromPk, to, token)
-	assert.Error(t, err, constants.ShouldFail)
+	res, err := service.SimpleSendTransaction(quantity, fromPk, to, token)
+	assert.Error(t, err)
 	assert.EqualError(t, err, fmt.Sprintf("quantity is not valid %v", quantity))
 	assert.Equal(t, expectedRes, res)
 }
@@ -126,7 +125,7 @@ func Test_SendTransaction_NilQuantity(t *testing.T) {
 func Test_SendTransaction_InvalidAddress(t *testing.T) {
 	quantity := big.NewInt(10)
 	fromPk, err := crypto.GenerateKey()
-	assert.NoError(t, err, constants.ShouldNotFail)
+	assert.NoError(t, err)
 	to := common.HexToAddress("")
 	token := common.HexToAddress("")
 
@@ -135,7 +134,7 @@ func Test_SendTransaction_InvalidAddress(t *testing.T) {
 	mockApi := &MockApi{}
 
 	mockApi.On(
-		"SendTransaction",
+		"SimpleSendTransaction",
 		mock.Anything, // quantity
 		mock.Anything, // fromPk
 		mock.Anything, // to
@@ -144,8 +143,8 @@ func Test_SendTransaction_InvalidAddress(t *testing.T) {
 
 	service := NewService(&Resources{API: mockApi})
 
-	res, err := service.SendTransaction(quantity, fromPk, to, token)
-	assert.Error(t, err, constants.ShouldFail)
+	res, err := service.SimpleSendTransaction(quantity, fromPk, to, token)
+	assert.Error(t, err)
 	assert.EqualError(t, err, fmt.Sprintf("invalid address/es: %s", []interface{}{to, token}))
 	assert.Equal(t, expectedRes, res)
 }

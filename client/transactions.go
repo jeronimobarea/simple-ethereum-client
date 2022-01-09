@@ -9,14 +9,14 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 
-	simpleCommon "github.com/jeronimobarea/simple-ethereum/common"
+	simpleCommon "github.com/jeronimobarea/simple-ethereum-client/common"
 )
 
 type TransactionResponse struct {
 	Transaction *types.Transaction `json:"transaction"`
 }
 
-func (svc *ethereumService) SendTransaction(
+func (svc *ethereumService) SimpleSendTransaction(
 	quantity *big.Int,
 	fromPk *ecdsa.PrivateKey,
 	to,
@@ -38,5 +38,5 @@ func (svc *ethereumService) SendTransaction(
 		err = errors.New("private key cannot be nil")
 		return
 	}
-	return svc.API.SendTransaction(quantity, fromPk, to, token)
+	return svc.API.SimpleSendTransaction(quantity, fromPk, to, token)
 }

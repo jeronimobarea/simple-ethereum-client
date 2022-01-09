@@ -4,7 +4,6 @@ go 1.17
 
 require (
 	github.com/ethereum/go-ethereum v1.10.15
-	github.com/jeronimobarea/simple-ethereum v0.0.0-20220108192521-c365244a81e0
 	github.com/stretchr/testify v1.7.0
 	github.com/tj/assert v0.0.3
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3

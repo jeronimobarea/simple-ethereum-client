@@ -5,7 +5,8 @@ import (
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
-	simpleCommon "github.com/jeronimobarea/simple-ethereum/common"
+
+	simpleCommon "github.com/jeronimobarea/simple-ethereum-client/common"
 )
 
 type (
@@ -19,7 +20,7 @@ type (
 	}
 )
 
-func (svc *ethereumService) CheckBalance(
+func (svc *ethereumService) SimpleCheckBalance(
 	address,
 	token common.Address,
 ) (resp *BalanceResponse, err error) {
@@ -28,12 +29,12 @@ func (svc *ethereumService) CheckBalance(
 		err = fmt.Errorf("invalid address/es: %s", invalid)
 		return
 	}
-	return svc.API.CheckBalance(address, token)
+	return svc.API.SimpleCheckBalance(address, token)
 }
 
-func (svc *ethereumService) CheckBalances(
+func (svc *ethereumService) SimpleCheckBalances(
 	addresses []common.Address,
 	token common.Address,
 ) (resp *BalancesResponse, err error) {
-	return svc.API.CheckBalances(addresses, token)
+	return svc.API.SimpleCheckBalances(addresses, token)
 }

@@ -12,7 +12,7 @@ type MockApi struct {
 	mock.Mock
 }
 
-func (api *MockApi) SendTransaction(
+func (api *MockApi) SimpleSendTransaction(
 	quantity *big.Int,
 	fromPk *ecdsa.PrivateKey,
 	to,
@@ -28,7 +28,7 @@ func (api *MockApi) SendTransaction(
 	return resp, args.Error(1)
 }
 
-func (api *MockApi) CheckBalance(
+func (api *MockApi) SimpleCheckBalance(
 	address, token common.Address,
 ) (
 	resp *BalanceResponse,
@@ -41,7 +41,7 @@ func (api *MockApi) CheckBalance(
 	return resp, args.Error(1)
 }
 
-func (api *MockApi) CheckBalances(
+func (api *MockApi) SimpleCheckBalances(
 	address []common.Address, token common.Address,
 ) (
 	resp *BalancesResponse,

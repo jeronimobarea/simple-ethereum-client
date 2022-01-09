@@ -8,7 +8,7 @@ import (
 )
 
 type Api interface {
-	SendTransaction(quantity *big.Int, fromPk *ecdsa.PrivateKey, to, token common.Address) (*TransactionResponse, error)
-	CheckBalance(address, token common.Address) (*BalanceResponse, error)
-	CheckBalances(addresses []common.Address, token common.Address) (*BalancesResponse, error)
+	SimpleSendTransaction(quantity *big.Int, fromPk *ecdsa.PrivateKey, to, token common.Address) (*TransactionResponse, error)
+	SimpleCheckBalance(address, token common.Address) (*BalanceResponse, error)
+	SimpleCheckBalances(addresses []common.Address, token common.Address) (*BalancesResponse, error)
 }

@@ -1,5 +1,5 @@
 
-run_tests:
+tests:
 	docker build . -t go_test_env
 	docker run \
     	--rm \

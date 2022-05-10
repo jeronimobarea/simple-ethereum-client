@@ -10,18 +10,16 @@ import (
 
 func GetAddressFromPrivateKey(
 	privateKey *ecdsa.PrivateKey,
-) (address common.Address, err error) {
+) (common.Address, error) {
 	if privateKey == nil {
 		return common.Address{}, errors.New("error private key can not be nil")
 	}
 	publicKey := privateKey.Public()
 	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 	if !ok {
-		err = errors.New("error retrieving public key")
-		return
+		return common.Address{}, errors.New("error retrieving public key")
 	}
-	address = crypto.PubkeyToAddress(*publicKeyECDSA)
-	return
+	return crypto.PubkeyToAddress(*publicKeyECDSA), nil
 }
 
 func MustGetAddressFromPrivateKey(privateKey *ecdsa.PrivateKey) common.Address {

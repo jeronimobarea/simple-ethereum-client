@@ -7,7 +7,6 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 )
 
-// IsValidAddress validate hex address
 func IsValidAddress(iaddress interface{}) bool {
 	re := regexp.MustCompile("^0x[0-9a-fA-F]{40}$")
 	switch v := iaddress.(type) {
@@ -20,7 +19,6 @@ func IsValidAddress(iaddress interface{}) bool {
 	}
 }
 
-// IsZeroAddress validate if it's a 0 address
 func IsZeroAddress(iaddress interface{}) bool {
 	var address common.Address
 	switch v := iaddress.(type) {
@@ -37,7 +35,6 @@ func IsZeroAddress(iaddress interface{}) bool {
 	return reflect.DeepEqual(addressBytes, zeroAddressBytes)
 }
 
-// ValidateAddress will check that the address format is correct and that it is not a zero address
 func ValidateAddress(address interface{}) bool {
 	return IsValidAddress(address) && !IsZeroAddress(address)
 }

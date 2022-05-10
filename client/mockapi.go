@@ -5,6 +5,7 @@ import (
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -12,23 +13,23 @@ type MockApi struct {
 	mock.Mock
 }
 
-func (api *MockApi) SimpleSendTransaction(
+func (api *MockApi) SendTransaction(
 	quantity *big.Int,
 	fromPk *ecdsa.PrivateKey,
 	to,
 	token common.Address,
 ) (
-	resp *TransactionResponse,
+	resp *types.Transaction,
 	err error,
 ) {
 	args := api.Called(quantity, fromPk, to, token)
 	if args.Get(0) != nil {
-		resp = args.Get(0).(*TransactionResponse)
+		resp = args.Get(0).(*types.Transaction)
 	}
 	return resp, args.Error(1)
 }
 
-func (api *MockApi) SimpleCheckBalance(
+func (api *MockApi) CheckBalance(
 	address, token common.Address,
 ) (
 	resp *BalanceResponse,
@@ -41,7 +42,7 @@ func (api *MockApi) SimpleCheckBalance(
 	return resp, args.Error(1)
 }
 
-func (api *MockApi) SimpleCheckBalances(
+func (api *MockApi) CheckBalances(
 	address []common.Address, token common.Address,
 ) (
 	resp *BalancesResponse,

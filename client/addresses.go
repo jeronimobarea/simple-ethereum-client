@@ -20,7 +20,7 @@ type (
 	}
 )
 
-func (svc *ethereumService) SimpleCheckBalance(
+func (svc *ethereumService) CheckBalance(
 	address,
 	token common.Address,
 ) (resp *BalanceResponse, err error) {
@@ -29,12 +29,12 @@ func (svc *ethereumService) SimpleCheckBalance(
 		err = fmt.Errorf("invalid address/es: %s", invalid)
 		return
 	}
-	return svc.API.SimpleCheckBalance(address, token)
+	return svc.API.CheckBalance(address, token)
 }
 
-func (svc *ethereumService) SimpleCheckBalances(
+func (svc *ethereumService) CheckBalances(
 	addresses []common.Address,
 	token common.Address,
 ) (resp *BalancesResponse, err error) {
-	return svc.API.SimpleCheckBalances(addresses, token)
+	return svc.API.CheckBalances(addresses, token)
 }

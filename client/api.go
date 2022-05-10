@@ -5,10 +5,11 @@ import (
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 )
 
 type Api interface {
-	SimpleSendTransaction(quantity *big.Int, fromPk *ecdsa.PrivateKey, to, token common.Address) (*TransactionResponse, error)
-	SimpleCheckBalance(address, token common.Address) (*BalanceResponse, error)
-	SimpleCheckBalances(addresses []common.Address, token common.Address) (*BalancesResponse, error)
+	SendTransaction(quantity *big.Int, fromPk *ecdsa.PrivateKey, to, token common.Address) (*types.Transaction, error)
+	CheckBalance(address, token common.Address) (*BalanceResponse, error)
+	CheckBalances(addresses []common.Address, token common.Address) (*BalancesResponse, error)
 }

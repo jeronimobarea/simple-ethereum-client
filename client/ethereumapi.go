@@ -35,12 +35,12 @@ func SafeNewApiImplementation(client *ethclient.Client) (Api, error) {
 	return &apiImplementation{client: client}, nil
 }
 
-func (api *apiImplementation) SimpleSendTransaction(
+func (api *apiImplementation) SendTransaction(
 	quantity *big.Int,
 	fromPk *ecdsa.PrivateKey,
 	to,
 	token common.Address,
-) (resp *TransactionResponse, err error) {
+) (resp *types.Transaction, err error) {
 	from, err := simpleCommon.GetAddressFromPrivateKey(fromPk)
 	if err != nil {
 		return
@@ -95,21 +95,19 @@ func (api *apiImplementation) SimpleSendTransaction(
 		return
 	}
 
-	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainID), fromPk)
+	resp, err = types.SignTx(tx, types.NewEIP155Signer(chainID), fromPk)
 	if err != nil {
 		return
 	}
 
-	err = api.client.SendTransaction(context.Background(), signedTx)
+	err = api.client.SendTransaction(context.Background(), resp)
 	if err != nil {
 		return
 	}
-
-	resp = &TransactionResponse{Transaction: signedTx}
 	return
 }
 
-func (api *apiImplementation) SimpleCheckBalance(
+func (api *apiImplementation) CheckBalance(
 	address,
 	token common.Address,
 ) (resp *BalanceResponse, err error) {
@@ -127,7 +125,7 @@ func (api *apiImplementation) SimpleCheckBalance(
 	return
 }
 
-func (api *apiImplementation) SimpleCheckBalances(
+func (api *apiImplementation) CheckBalances(
 	addresses []common.Address,
 	token common.Address,
 ) (resp *BalancesResponse, err error) {
@@ -136,7 +134,7 @@ func (api *apiImplementation) SimpleCheckBalances(
 	for _, address := range addresses {
 		var balance *BalanceResponse
 
-		balance, err = api.SimpleCheckBalance(address, token)
+		balance, err = api.CheckBalance(address, token)
 		if err != nil {
 			tmpBalances[address] = &BalanceResponse{
 				Error: err,

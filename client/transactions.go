@@ -12,16 +12,12 @@ import (
 	simpleCommon "github.com/jeronimobarea/simple-ethereum-client/common"
 )
 
-type TransactionResponse struct {
-	Transaction *types.Transaction `json:"transaction"`
-}
-
-func (svc *ethereumService) SimpleSendTransaction(
+func (svc *ethereumService) SendTransaction(
 	quantity *big.Int,
 	fromPk *ecdsa.PrivateKey,
 	to,
 	token common.Address,
-) (resp *TransactionResponse, err error) {
+) (resp *types.Transaction, err error) {
 	addresses := []interface{}{to, token}
 
 	if _, invalid, _ := simpleCommon.ValidateAddresses(addresses); invalid != nil {
@@ -38,5 +34,5 @@ func (svc *ethereumService) SimpleSendTransaction(
 		err = errors.New("private key cannot be nil")
 		return
 	}
-	return svc.API.SimpleSendTransaction(quantity, fromPk, to, token)
+	return svc.API.SendTransaction(quantity, fromPk, to, token)
 }

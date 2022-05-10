@@ -10,53 +10,52 @@ import (
 	"github.com/tj/assert"
 )
 
-/*
- * SimpleCheckBalance
- */
-func Test_CheckBalance_ValidInput(t *testing.T) {
-	address := common.HexToAddress("0x323b5d4c32345ced77393b3530b1eed0f346429d")
-	token := common.HexToAddress("0x323b5d4c32345ced77393b3530b1eed0f346429d")
+func Test_CheckBalance(t *testing.T) {
+	t.Run("valid input", func(t *testing.T) {
+		address := common.HexToAddress("0x323b5d4c32345ced77393b3530b1eed0f346429d")
+		token := common.HexToAddress("0x323b5d4c32345ced77393b3530b1eed0f346429d")
 
-	expectedBalance := big.NewInt(10)
+		expectedBalance := big.NewInt(10)
 
-	mockApi := &MockApi{}
+		mockApi := &MockApi{}
 
-	mockResponse := &BalanceResponse{
-		Balance: expectedBalance,
-		Error:   nil,
-	}
-	mockApi.On(
-		"SimpleCheckBalance",
-		mock.Anything, // address
-		mock.Anything, // token
-	).Return(mockResponse, nil)
+		mockResponse := &BalanceResponse{
+			Balance: expectedBalance,
+			Error:   nil,
+		}
+		mockApi.On(
+			"CheckBalance",
+			mock.Anything, // address
+			mock.Anything, // token
+		).Return(mockResponse, nil)
 
-	service := NewService(&Resources{API: mockApi})
+		service := NewService(&Resources{API: mockApi})
 
-	res, err := service.SimpleCheckBalance(address, token)
-	assert.NoError(t, err)
-	assert.Equal(t, expectedBalance, res.Balance)
-	assert.NoError(t, res.Error)
-}
+		res, err := service.CheckBalance(address, token)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedBalance, res.Balance)
+		assert.NoError(t, res.Error)
+	})
 
-func Test_CheckBalance_InvalidInput(t *testing.T) {
-	address := common.HexToAddress("")
-	token := common.HexToAddress("")
+	t.Run("invalid input", func(t *testing.T) {
+		address := common.HexToAddress("")
+		token := common.HexToAddress("")
 
-	var expectedRes *BalanceResponse
+		var expectedRes *BalanceResponse
 
-	mockApi := &MockApi{}
+		mockApi := &MockApi{}
 
-	mockApi.On(
-		"SimpleCheckBalance",
-		mock.Anything, // address
-		mock.Anything, // token
-	).Return(nil, nil)
+		mockApi.On(
+			"CheckBalance",
+			mock.Anything, // address
+			mock.Anything, // token
+		).Return(nil, nil)
 
-	service := NewService(&Resources{API: mockApi})
+		service := NewService(&Resources{API: mockApi})
 
-	res, err := service.SimpleCheckBalance(address, token)
-	assert.Error(t, err)
-	assert.EqualError(t, err, fmt.Sprintf("invalid address/es: %s", []interface{}{address, token}))
-	assert.Equal(t, expectedRes, res)
+		res, err := service.CheckBalance(address, token)
+		assert.Error(t, err)
+		assert.EqualError(t, err, fmt.Sprintf("invalid address/es: %s", []interface{}{address, token}))
+		assert.Equal(t, expectedRes, res)
+	})
 }

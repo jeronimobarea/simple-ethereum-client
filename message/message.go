@@ -21,9 +21,5 @@ func SignMessage(
 	data := []byte(message)
 	hash := crypto.Keccak256Hash(data)
 
-	signature, err := crypto.Sign(hash.Bytes(), privateKey)
-	if err != nil {
-		return nil, err
-	}
-	return signature, nil
+	return crypto.Sign(hash.Bytes(), privateKey)
 }

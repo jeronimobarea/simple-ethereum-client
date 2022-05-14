@@ -8,6 +8,7 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 )
 
+//go:generate mockgen -source=../client/api.go -destination=../mocks/mock_api.go -package=mocks
 type Api interface {
 	SendTransaction(quantity *big.Int, fromPk *ecdsa.PrivateKey, to, token common.Address) (*types.Transaction, error)
 	CheckBalance(address, token common.Address) (*BalanceResponse, error)
